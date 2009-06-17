@@ -1,0 +1,66 @@
+
+        What you need and should know to get the example running
+        ========================================================
+
+        General
+        -------
+        The startup scripts (the *.sh and *.bat files) expect to be
+        run from the examples directory.
+
+        Before you try to compile libclois-lane yourself try running
+        the example with the libraries that are in the clois-lane lib
+        directory.
+
+        Linux
+        -----
+        The Linux startup is written and tested using SBCL
+        (1.0.25.debian at the time of writing) and expects to find
+        'sbcl' in the path.
+
+        It also expects to find necessary OIS libraries in either
+        /usr/local/lib or the clois-lane lib directory.
+
+        All these options are set in the *.sh file and can be changed
+        there.
+
+        If the libraries that come with the clois-lane distribution
+        don't work for you, you'll need to compile OIS (and
+        libclois-lane) yourself .  Download the source from:
+        http://sourceforge.net/project/showfiles.php?group_id=149835&package_id=166954&release_id=583859
+        (you'll need "ois_1.2.0.tar.gz")
+
+        For libcloise-lane you'll need CMake as well (www.cmake.org).
+        Once that is installed issue:
+
+            > cmake -G "Unix Makefiles"
+
+        and then
+
+            > make
+
+        and the library should end up in the lib directory if all goes
+        well.
+
+        Windows
+        -------
+        The Windows startup script is written and tested using Clozure
+        CL and expects to find 'wx86cl' in the path.
+
+        All libraries are expected to be found in the lib directory of
+        the Buclet distribution.
+
+        All these settings are in the *.bat file and can be changed
+        there.
+
+        If libclois-lane.dll that comes with the clois-lane
+        distribution don't work for you, you'll need to compile it
+        yourself using MinGW.  Check the README.MinGW file for more
+        information.
+
+        Note: you do not need to compile OIS.dll yourself!  Get that
+        from the Ogre SDK (since that's the only one it has been
+        tested with): http://www.ogre3d.org/download/sdk (you'll need
+        "OGRE 1.6.x SDK for Code::Blocks + MinGW C++ Toolbox").
+
+
+                                              Erik Winkels, 2009-06-02
