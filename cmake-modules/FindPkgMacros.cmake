@@ -32,7 +32,7 @@ macro(create_search_paths PREFIX)
       ${dir}/include ${dir}/include/${PREFIX} ${dir}/Headers)
     set(${PREFIX}_LIB_SEARCH_PATH ${${PREFIX}_LIB_SEARCH_PATH}
       ${dir}/lib ${dir}/lib/${PREFIX} ${dir}/Libs
-      ${dir/bin/release)
+      ${dir}/bin/release)
   endforeach(dir)
   set(${PREFIX}_FRAMEWORK_SEARCH_PATH ${${PREFIX}_PREFIX_PATH})
 endmacro(create_search_paths)
