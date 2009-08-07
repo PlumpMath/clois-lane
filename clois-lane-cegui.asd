@@ -1,6 +1,6 @@
 ;;;; -*- Mode: LISP; Syntax: COMMON-LISP -*-
 ;;;;
-;;;; clois-lane.asd
+;;;; clois-lane-cegui.asd
 ;;;;
 ;;;; author: Erik Winkels (aerique@xs4all.nl)
 ;;;;
@@ -13,14 +13,10 @@
 
 (in-package :clois-lane-system)
 
-(asdf:defsystem :clois-lane
+(asdf:defsystem :clois-lane-cegui
   :version "1.2.0.2"
   :components
     ((:module src
       :components
-        ((:file "package")
-         (:file "actions" :depends-on ("package" "keyboard-scancodes"))
-         (:file "cffi" :depends-on ("package" "actions" "ois-lib"))
-         (:file "keyboard-scancodes" :depends-on ("package"))
-         (:file "ois-lib" :depends-on ("package")))))
-  :depends-on (:cffi))
+        ((:file "actions-cegui"))))
+  :depends-on (:clois-lane))

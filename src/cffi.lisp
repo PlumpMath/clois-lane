@@ -14,9 +14,15 @@
 (defcfun ("ois_capture" capture)
     :void)
 
-(defcfun ("ois_create_input_system" create-input-system)
+
+(defcfun ("ois_create_input_system" ois-create-input-system)
     :pointer
-  (window :string))
+  (window :string)
+  (hide-mouse :boolean))
+
+(defun create-input-system (window &key (hide-mouse nil))
+  (ois-create-input-system window hide-mouse))
+
 
 (defcfun ("ois_set_window_extents" set-window-extents)
     :void
@@ -28,16 +34,22 @@
 
 ;;; Keyboard
 
-(defcallback key-pressed :void ((key :int))
-  (handle-key-event key :pressed))
+(defcallback key-pressed
+    :void
+  ((key :int)
+   (text :unsigned-int))
+  (handle-key-event key text :pressed))
 
 (defcvar "clfun_key_pressed" :pointer)
 
 (setf *clfun-key-pressed* (get-callback 'key-pressed))
 
 
-(defcallback key-released :void ((key :int))
-  (handle-key-event key :released))
+(defcallback key-released
+    :void
+  ((key :int)
+   (text :unsigned-int))
+  (handle-key-event key text :released))
 
 (defcvar "clfun_key_released" :pointer)
 
@@ -46,8 +58,11 @@
 
 ;;; Mouse
 
-(defcallback mouse-moved :void ((mx :int) (my :int))
-  (handle-mouse-move-event mx my))
+(defcallback mouse-moved
+    :void
+  ((rel-x :int)  (rel-y :int)  (rel-z :int)
+   (abs-x :int)  (abs-y :int)  (abs-z :int))
+  (handle-mouse-move-event rel-x rel-y rel-z abs-x abs-y abs-z))
 
 (defcvar "clfun_mouse_moved" :pointer)
 

@@ -14,9 +14,9 @@ using namespace std;
 
 // Pointers to Common Lisp functions
 
-void (*clfun_key_pressed)(int);
-void (*clfun_key_released)(int);
-void (*clfun_mouse_moved)(int, int);
+void (*clfun_key_pressed)(int, unsigned int);
+void (*clfun_key_released)(int, unsigned int);
+void (*clfun_mouse_moved)(int, int, int, int, int, int);
 void (*clfun_mouse_pressed)(int);
 void (*clfun_mouse_released)(int);
 
@@ -36,7 +36,7 @@ class InputHandler : OIS::KeyListener, public OIS::MouseListener
         OIS::Mouse* mouse;
 
     public:
-        InputHandler(std::string hWnd);
+        InputHandler(std::string hWnd, bool hide_mouse);
         ~InputHandler();
 
         void capture();
@@ -55,7 +55,7 @@ class InputHandler : OIS::KeyListener, public OIS::MouseListener
 
 // Constructors
 
-InputHandler::InputHandler(std::string hWnd)
+InputHandler::InputHandler(std::string hWnd, bool hide_mouse)
 {
     OIS::ParamList pl;
 
@@ -66,7 +66,11 @@ InputHandler::InputHandler(std::string hWnd)
     pl.insert(make_pair("XAutoRepeatOn", "false"));
     pl.insert(make_pair("x11_keyboard_grab", "false"));
     pl.insert(make_pair("x11_mouse_grab", "false"));
-    pl.insert(make_pair("x11_mouse_hide", "false"));
+    if (hide_mouse) {
+        pl.insert(make_pair("x11_mouse_hide", "true"));
+    } else {
+        pl.insert(make_pair("x11_mouse_hide", "false"));
+    }
 #endif
 
     // XXX: this should be settable from CL
@@ -111,7 +115,7 @@ void InputHandler::capture()
                         (ois->createInputObject(OIS::OISMouse, true));
             mouse->setEventCallback(this);
 
-            cout << "[liblois-lane] Keyboard and mouse acquired!" << endl;
+            cout << "[libclois-lane] Keyboard and mouse acquired!" << endl;
         } catch (OIS::Exception &e) {
             cout << "[libclois-lane] " << e.eText << endl;
         }
@@ -144,24 +148,22 @@ void InputHandler::setWindowExtents(int width, int height)
 
 bool InputHandler::keyPressed(const OIS::KeyEvent &evt)
 {
-    clfun_key_pressed(evt.key);
+    clfun_key_pressed(evt.key, evt.text);
     return true;
 }
 
 
 bool InputHandler::keyReleased(const OIS::KeyEvent &evt)
 {
-    clfun_key_released(evt.key);
+    clfun_key_released(evt.key, evt.text);
     return true;
 }
 
 
 bool InputHandler::mouseMoved(const OIS::MouseEvent &evt)
 {
-    // This is incomplete and only works for the x and y axes.
-    // Note: the scrollwheel and buttons beyond the fifth also count
-    // as additional axes.
-    clfun_mouse_moved(evt.state.X.rel, evt.state.Y.rel);
+    clfun_mouse_moved(evt.state.X.rel, evt.state.Y.rel, evt.state.Z.rel,
+                      evt.state.X.abs, evt.state.Y.abs, evt.state.Z.abs);
     return true;
 }
 
@@ -191,7 +193,7 @@ extern "C"
     // Prototypes
 
     void ois_capture();
-    InputHandler* ois_create_input_system(const char*);
+    InputHandler* ois_create_input_system(const char*, bool);
     void ois_set_window_extents(int, int);
 
 
@@ -203,14 +205,14 @@ extern "C"
     }
 
 
-    InputHandler* ois_create_input_system(const char* hWnd)
+    InputHandler* ois_create_input_system(const char* hWnd, bool hide_mouse)
     {
         //unsigned long hWnd;
         //rw->getCustomAttribute("WINDOW", &hWnd);
 
         if (ois_input_handler == 0)
         {
-            ois_input_handler = new InputHandler(hWnd);
+            ois_input_handler = new InputHandler(hWnd, hide_mouse);
         }
 
         return ois_input_handler;

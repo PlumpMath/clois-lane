@@ -9,26 +9,18 @@
 (in-package :clois-lane)
 
 
-;;; Variables
-
-(defvar *actions* nil)
-
-
 ;;; Functions
-
-(defun add-action (key action)
-  (setf *actions* (append *actions* (list (cons key action)))))
-
-
-(defun get-actions ()
-  *actions*)
-
 
 (defun handle-key-event (key text state)
   (let* ((key-name (cdr (assoc key +scancodes+)))
          (char (code-char text))
          (action (cdr (assoc key-name *actions*)))
          (default (cdr (assoc :key-default *actions*))))
+    (cond ((equal state :pressed)
+           (okra-cegui::inject-key-down key)
+           (okra-cegui::inject-char text))
+          ((equal state :released)
+           (okra-cegui::inject-key-up key)))
     (cond (action (funcall action key char state))
           (default (funcall default key char state)))))
 
@@ -37,6 +29,10 @@
   (let* ((mouse-button (intern (format nil "MOUSE-BUTTON-~A" button) :keyword))
          (action (cdr (assoc mouse-button *actions*)))
          (default (cdr (assoc :mouse-button-default *actions*))))
+    (cond ((equal state :pressed)
+           (okra-cegui::inject-mouse-button-down button))
+          ((equal state :released)
+           (okra-cegui::inject-mouse-button-up button)))
     (cond (action (funcall action mouse-button state))
           (default (funcall default mouse-button state)))))
 
@@ -46,17 +42,11 @@
         (mouse-y (cdr (assoc :mouse-y *actions*)))
         (mouse-z (cdr (assoc :mouse-z *actions*)))
         (mouse-default (cdr (assoc :mouse-move-default *actions*))))
+    (okra-cegui::inject-mouse-position (coerce abs-x 'float)
+                                       (coerce abs-y 'float))
     (cond (mouse-x (funcall mouse-x :mouse-x rel-x abs-x))
           (mouse-default (funcall mouse-default :mouse-x rel-x abs-x)))
     (cond (mouse-y (funcall mouse-y :mouse-y rel-y abs-y))
           (mouse-default (funcall mouse-default :mouse-y rel-y abs-y)))
     (cond (mouse-z (funcall mouse-z :mouse-z rel-z abs-z))
           (mouse-default (funcall mouse-default :mouse-z rel-z abs-z)))))
-
-
-(defun remove-action (key action)
-  (setf *actions* (remove (cons key action) *actions* :test 'equal)))
-
-
-(defun set-actions (actions)
-  (setf *actions* actions))
