@@ -16,5 +16,10 @@
   (:unix "libclois-lane.so")
   (t "libclois-lane"))
 
-(use-foreign-library libclois-lane)
-(format t "~&[clois-lane] foreign library libclois-lane loaded~%")
+
+(defun load-foreign-libraries ()
+  (use-foreign-library libclois-lane)
+  (format t "~&[clois-lane] foreign library libclois-lane loaded~%"))
+
+
+(load-foreign-libraries)
