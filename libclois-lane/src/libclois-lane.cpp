@@ -9,6 +9,10 @@
 
 #include "OIS.h"
 
+#if defined(_WIN32)
+#include "Windows.h"
+#endif
+
 using namespace std;
 
 
@@ -81,6 +85,11 @@ InputHandler::InputHandler(std::string hWnd, bool hide_mouse)
     pl.insert(make_pair("w32_keyboard", "DISCL_FOREGROUND"));
     //pl.insert(make_pair("w32_keyboard", "DISCL_BACKGROUND"));
     pl.insert(make_pair("w32_keyboard", "DISCL_NONEXCLUSIVE"));
+    if (hide_mouse) {
+        ShowCursor(false);
+    } else {
+        ShowCursor(false);
+    }
 #endif
 
     ois = OIS::InputManager::createInputSystem(pl);
