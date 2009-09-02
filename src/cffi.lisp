@@ -42,8 +42,6 @@
 
 (defcvar "clfun_key_pressed" :pointer)
 
-(setf *clfun-key-pressed* (get-callback 'key-pressed))
-
 
 (defcallback key-released
     :void
@@ -52,8 +50,6 @@
   (handle-key-event key text :released))
 
 (defcvar "clfun_key_released" :pointer)
-
-(setf *clfun-key-released* (get-callback 'key-released))
 
 
 ;;; Mouse
@@ -66,15 +62,11 @@
 
 (defcvar "clfun_mouse_moved" :pointer)
 
-(setf *clfun-mouse-moved* (get-callback 'mouse-moved))
-
 
 (defcallback mouse-pressed :void ((mbtn :int))
   (handle-mouse-button-event mbtn :pressed))
 
 (defcvar "clfun_mouse_pressed" :pointer)
-
-(setf *clfun-mouse-pressed* (get-callback 'mouse-pressed))
 
 
 (defcallback mouse-released :void ((mbtn :int))
@@ -82,4 +74,14 @@
 
 (defcvar "clfun_mouse_released" :pointer)
 
-(setf *clfun-mouse-released* (get-callback 'mouse-released))
+
+;;; Initialising Callbacks
+
+(defun initialise-callbacks ()
+  (setf *clfun-key-pressed* (get-callback 'key-pressed))
+  (setf *clfun-key-released* (get-callback 'key-released))
+  (setf *clfun-mouse-moved* (get-callback 'mouse-moved))
+  (setf *clfun-mouse-pressed* (get-callback 'mouse-pressed))
+  (setf *clfun-mouse-released* (get-callback 'mouse-released)))
+
+(initialise-callbacks)
