@@ -14,6 +14,6 @@
 (in-package :clois-lane-system)
 
 (asdf:defsystem :clois-lane-cegui
-  :version "1.2.0.2"
+  :version "1.2.0.3"
   :components ((:module src :components ((:file "actions-cegui"))))
   :depends-on (:clois-lane :okra-cegui))
