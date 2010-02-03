@@ -11,5 +11,5 @@
 (defpackage :clois-lane
   (:use :cl :cffi)
   (:export :capture :create-input-system :set-window-extents
-           :add-action :enable-cegui-support :get-actions :remove-action
-           :set-actions))
+           :add-action :enable-cegui-support :enable-mygui-support
+           :get-actions :remove-action :set-actions))

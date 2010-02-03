@@ -14,7 +14,7 @@
 (in-package :clois-lane-system)
 
 (asdf:defsystem :clois-lane
-  :version "1.2.0.3"
+  :version "1.2.0.4"
   :components
     ((:module src
       :components

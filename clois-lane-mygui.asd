@@ -8,12 +8,9 @@
 
 (in-package :cl-user)
 
-(defpackage :clois-lane-system
-  (:use :cl :asdf))
 
-(in-package :clois-lane-system)
-
-(asdf:defsystem :clois-lane-cegui
+(asdf:defsystem :clois-lane-mygui
   :version "1.2.0.4"
-  :components ((:module src :components ((:file "actions-cegui"))))
-  :depends-on (:clois-lane :okra-cegui))
+  :depends-on (:clois-lane :okra-mygui)
+  :components ((:module src
+                :components ((:file "actions-mygui")))))
