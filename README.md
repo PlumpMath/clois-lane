@@ -1,5 +1,8 @@
 # clois-lane
 
+**status:** maintained
+
+
 ## CFFI bindings to OIS
 
 
