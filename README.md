@@ -1,6 +1,7 @@
 # clois-lane
 
-**status:** maintained
+**status:** stalled (please check out [Glop](https://github.com/patzy/glop)
+which doesn't depend on a C++ library)
 
 
 ## CFFI bindings to OIS
